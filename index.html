@@ -1,1 +1,770 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Happy Birthday!</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Poppins:wght@400;600&display=swap');
+        
+        :root {
+            --primary-blue: #1e90ff;
+            --light-blue: #87cefa;
+            --dark-blue: #0066cc;
+            --white: #ffffff;
+            --shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, var(--primary-blue) 0%, var(--light-blue) 100%);
+            color: #333;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            overflow-x: hidden;
+        }
 
+        /* Background Bubbles */
+        .bubbles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+        }
+        
+        .bubble {
+            position: absolute;
+            background: rgba(255,255,255,0.2);
+            border-radius: 50%;
+            animation: floatBubble 15s infinite linear;
+        }
+        
+        @keyframes floatBubble {
+            0% { transform: translateY(100vh) rotate(0deg); }
+            100% { transform: translateY(-100px) rotate(360deg); }
+        }
+        
+        /* Main Container */
+        .container {
+            width: 95%;
+            max-width: 900px;
+            margin: 2rem auto;
+            background: rgba(255,255,255,0.9);
+            border-radius: 15px;
+            box-shadow: var(--shadow);
+            overflow: hidden;
+            position: relative;
+        }
+        
+        /* Pages */
+        .page {
+            padding: 2rem;
+            display: none;
+            animation: fadeIn 0.5s ease-out;
+        }
+        
+        .page.active {
+            display: block;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        /* Home Page */
+        #home-page {
+            text-align: center;
+            background: transparent;
+            box-shadow: none;
+        }
+        
+        .birthday-text {
+            font-family: 'Dancing Script', cursive;
+            font-size: clamp(3rem, 8vw, 5rem);
+            color: var(--white);
+            text-shadow: 3px 3px 0 rgba(0,0,0,0.2);
+            margin-bottom: 1rem;
+            animation: textPopIn 1s 0.5s both;
+        }
+        
+        @keyframes textPopIn {
+            from { opacity: 0; transform: scale(0.8); }
+            to { opacity: 1; transform: scale(1); }
+        }
+        
+        .friend-name {
+            display: inline-block;
+            background: var(--white);
+            color: var(--primary-blue);
+            padding: 0.5rem 1.5rem;
+            border-radius: 50px;
+            transform: rotate(-3deg);
+            box-shadow: var(--shadow);
+            margin: 1rem 0;
+            animation: nameSlideIn 1s 1s both;
+        }
+        
+        @keyframes nameSlideIn {
+            from { opacity: 0; transform: rotate(-3deg) translateY(30px); }
+            to { opacity: 1; transform: rotate(-3deg) translateY(0); }
+        }
+        
+        .click-message {
+            color: var(--white);
+            font-size: clamp(1rem, 4vw, 1.2rem);
+            margin: 1rem 0;
+            animation: fadeIn 1s 1.5s both;
+        }
+        
+        .btn {
+            padding: 0.8rem 2rem;
+            background: var(--white);
+            color: var(--primary-blue);
+            border: none;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            margin-top: 1rem;
+            transition: all 0.3s;
+            box-shadow: var(--shadow);
+        }
+        
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+        }
+        
+        /* Polaroid Slideshow */
+        #memories-page h1, #letter-page h1, #wishes-page h2 {
+            color: var(--primary-blue);
+            margin-bottom: 1.5rem;
+            text-align: center;
+        }
+        
+        .polaroid-slider {
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+            margin: 0 auto;
+            overflow: hidden;
+        }
+        
+        .slides-container {
+            display: flex;
+            transition: transform 0.5s ease-in-out;
+        }
+        
+        .slide {
+            min-width: 100%;
+            padding: 1rem;
+        }
+        
+        .polaroid {
+            background: var(--white);
+            padding: 1rem 1rem 3rem 1rem;
+            box-shadow: var(--shadow);
+            transform: rotate(-2deg);
+            transition: all 0.3s;
+            position: relative;
+        }
+        
+        .polaroid:nth-child(even) {
+            transform: rotate(2deg);
+        }
+        
+        .polaroid-media-container {
+            width: 100%;
+            height: 300px;
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+        }
+        
+        .polaroid-media {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+        
+        .polaroid-caption {
+            text-align: center;
+            margin-top: 1rem;
+            font-family: 'Dancing Script', cursive;
+            font-size: 1.3rem;
+            color: #333;
+        }
+        
+        .play-icon {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 50px;
+            height: 50px;
+            background: rgba(30, 144, 255, 0.8);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+            opacity: 0.9;
+            transition: all 0.3s;
+        }
+        
+        .play-icon:hover {
+            transform: translate(-50%, -50%) scale(1.1);
+        }
+        
+        .slider-nav {
+            display: flex;
+            justify-content: center;
+            margin-top: 1.5rem;
+        }
+        
+        .slider-dot {
+            width: 12px;
+            height: 12px;
+            background: #ccc;
+            border-radius: 50%;
+            margin: 0 5px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .slider-dot.active {
+            background: var(--primary-blue);
+            transform: scale(1.2);
+        }
+        
+        /* Letter Page */
+        .letter {
+            background: var(--white);
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: var(--shadow);
+            margin: 2rem 0;
+            position: relative;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .letter p {
+            margin-bottom: 1rem;
+            line-height: 1.6;
+        }
+        
+        /* Wishes Page */
+        #wishes-page {
+            text-align: center;
+        }
+        
+        .heart {
+            color: #ff4757;
+            font-size: 3rem;
+            margin: 1rem 0;
+            display: inline-block;
+            animation: heartbeat 1.5s infinite;
+        }
+        
+        @keyframes heartbeat {
+            0% { transform: scale(1); }
+            25% { transform: scale(1.1); }
+            50% { transform: scale(1); }
+            75% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+        
+        /* Navigation Buttons */
+        .page-nav {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 2rem;
+        }
+        
+        /* Music Controls */
+        .music-controls {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: rgba(255,255,255,0.9);
+            padding: 10px;
+            border-radius: 50px;
+            display: flex;
+            align-items: center;
+            box-shadow: var(--shadow);
+            z-index: 1000;
+        }
+        
+        .music-btn {
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            margin: 0 5px;
+            color: var(--primary-blue);
+        }
+        
+        /* Responsive Adjustments */
+        @media (max-width: 768px) {
+            .container {
+                width: 100%;
+                border-radius: 0;
+            }
+            
+            .polaroid-media-container {
+                height: 250px;
+            }
+            
+            .letter {
+                padding: 1.5rem;
+            }
+            
+            .music-controls {
+                bottom: 10px;
+                right: 10px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .polaroid-media-container {
+                height: 200px;
+            }
+            
+            .polaroid-caption {
+                font-size: 1.1rem;
+            }
+            
+            .btn {
+                padding: 0.6rem 1.5rem;
+                font-size: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Background Music -->
+    <audio id="bgMusic" loop>
+        <source src="Feel-Good(chosic.com).mp3" type="audio/mpeg">
+        <source src="Feel-Good(chosic.com).ogg" type="audio/ogg">
+        Your browser does not support the audio element.
+    </audio>
+    
+    <!-- Music Controls -->
+    <div class="music-controls">
+        <button class="music-btn" id="playBtn">▶️</button>
+        <button class="music-btn" id="pauseBtn">⏸️</button>
+        <span id="musicStatus" style="margin-left: 10px; font-size: 14px;">Music: On</span>
+    </div>
+    
+    <!-- Background Bubbles -->
+    <div class="bubbles" id="bubbles"></div>
+    
+    <!-- Main Container -->
+    <div class="container">
+        <!-- Home Page -->
+        <div class="page active" id="home-page">
+            <div class="birthday-text">Happy Birthday</div>
+            <h1>Dear <span class="friend-name" id="friend-name-display">Best Friend</span>!</h1>
+            <p class="click-message">Click below to see our special memories</p>
+            <button class="btn" id="start-btn">View Your Gift ❤️</button>
+        </div>
+        
+        <!-- Memories Page -->
+        <div class="page" id="memories-page">
+            <h1>Our Beautiful Journey</h1>
+            <p style="text-align: center;">Relive our most precious moments together</p>
+            
+            <div class="polaroid-slider">
+                <div class="slides-container" id="slides-container">
+                    <!-- Slide 1 -->
+                    <div class="slide">
+                        <div class="polaroid">
+                            <div class="polaroid-media-container">
+                                <img src="1.jpg" class="polaroid-media" alt="Our memory" onerror="this.src='https://via.placeholder.com/600x400?text=Memory+1'">
+                            </div>
+                            <div class="polaroid-caption">Memories</div>
+                        </div>
+                    </div>
+                    
+                    <!-- Slide 4 -->
+                    <div class="slide">
+                        <div class="polaroid">
+                            <div class="polaroid-media-container">
+                                <img src="4.jpg" class="polaroid-media" alt="Our memory" onerror="this.src='https://via.placeholder.com/600x400?text=Memory+4'">
+                            </div>
+                            <div class="polaroid-caption">Special moments</div>
+                        </div>
+                    </div>
+                    
+                    <!-- Slide 5 -->
+                    <div class="slide">
+                        <div class="polaroid">
+                            <div class="polaroid-media-container">
+                                <img src="5.jpg" class="polaroid-media" alt="Our memory" onerror="this.src='https://via.placeholder.com/600x400?text=Memory+5'">
+                            </div>
+                            <div class="polaroid-caption">Adventures</div>
+                        </div>
+                    </div>
+                    
+                    <!-- Slide 6 (Video) -->
+                    <div class="slide">
+                        <div class="polaroid">
+                            <div class="polaroid-media-container">
+                                <video class="polaroid-media" poster="https://via.placeholder.com/600x400?text=Click+to+Play" playsinline>
+                                    <source src="video.mp4" type="video/mp4">
+                                    <source src="video.webm" type="video/webm">
+                                    Your browser does not support the video tag.
+                                </video>
+                                <div class="play-icon">▶</div>
+                            </div>
+                            <div class="polaroid-caption">Special moments</div>
+                        </div>
+                    </div>
+                    
+                    <!-- Slide 7 -->
+                    <div class="slide">
+                        <div class="polaroid">
+                            <div class="polaroid-media-container">
+                                <img src="6.jpg" class="polaroid-media" alt="Our memory" onerror="this.src='https://via.placeholder.com/600x400?text=Memory+6'">
+                            </div>
+                            <div class="polaroid-caption">Birthday celebration</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="slider-nav" id="slider-nav">
+                    <!-- Dots will be added by JavaScript -->
+                </div>
+            </div>
+            
+            <div class="page-nav">
+                <button class="btn" id="back-to-home-btn">← Home</button>
+                <button class="btn" id="to-letter-btn">Continue →</button>
+            </div>
+        </div>
+        
+        <!-- Letter Page -->
+        <div class="page" id="letter-page">
+            <h1>A Heartfelt Letter For You</h1>
+            
+            <div class="letter">
+                <p>Dear <span class="friend-name">Best Friend</span>,</p>
+                
+                <p>First Happy Birthday my dear user so nenu em chepdam anukuntunanu ante i feel very happy because that i am having u as my best friend.</p>
+                
+                <p>Btech ki rakamundu oka vishayam anukoni vachedani naku manchi best frnd vundali nenu ani vishaylu share chesukovalli,thanu etuvanti judgement evakunda vundali ani anukunedhani present i feel that i am very to say that u are my pichodhaa,
+                   kani naku oka vishayam ardam kadu andari appudu appudu kotukuna 5 to 6 days kani manam daily kotukuntam malli next day kalisipotham tom and jerry laga,kani manalini chusi andharu adhey anukuntaru anukoo. 
+                </p>
+                <p>challa chepdam anukuna kani em chepallo teliyat ledu kani oka vishyam chepdam anukunta last ioka 5months manaki gap vachindi adhi situations valla ayina nenu eppudu situations valla vodiledam ani anukoleduu anduke nenu netho vundaniki challa try chesa so manam last ki manam malli with some ec=xception but thats okay 
+                    so nenu eppudu nethone vunta nuvu etuvanti situations lo vunna nuvu natho vunna lekapoyina .i dont wont leave any more ,i want this frienship through out my life .kani appudu appudu i feel sad manam inko 6monthss ee college kalisi vuntam ani gurtochinapudu .naku telusu manam college ayaka kuda elane kalisi vuntamu ani .
+                    and last okati chepdam anukuna nuvu eppudu regret feel avvaku ne valla emi avvaledu avi ani situations valla matrame ayyayi regrets feel avutuu present moments miss avvaku.kanisam eppati ayina ee pichidhani matalu vinni buddi ga ee 6months enjoy chestavu anukuntuna.nuvu em feel avali ana emana chepukovali ana ee pichidi vundi marchipokuu.
+                </p>
+            
+                <p>As you celebrate another year of life, know that you're loved more than words can express. May this year bring you all the happiness, success, and adventure you deserve.</p>
+                
+                <p>Your Database</p>
+            </div>
+            
+            <div class="page-nav">
+                <button class="btn" id="back-to-memories-btn">← Memories</button>
+                <button class="btn" id="to-wishes-btn">Final Wishes →</button>
+            </div>
+        </div>
+        
+        <!-- Wishes Page -->
+        <div class="page" id="wishes-page">
+            <h2>Happy Birthday Once Again!</h2>
+            
+            <div class="final-wishes">
+                <p>May your day be filled with laughter, joy, and all the things you love most.</p>
+                <p>Thank you for being the incredible person you are - the world is brighter with you in it.</p>
+                
+                <div class="heart">❤️</div>
+                
+                <p>Here's to many more years of friendship, adventures, and shared memories!</p>
+                <p>With all my heart,</p>
+                <p>Your Database</p>
+            </div>
+            
+            <div class="page-nav">
+                <button class="btn" id="back-to-letter-btn">← Letter</button>
+                <button class="btn" id="restart-btn">Start Again ❤️</button>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Create background bubbles
+            function createBubbles() {
+                const bubblesContainer = document.getElementById('bubbles');
+                const bubbleCount = Math.floor(window.innerWidth / 20); // Adjust based on screen size
+                
+                for (let i = 0; i < bubbleCount; i++) {
+                    const bubble = document.createElement('div');
+                    bubble.className = 'bubble';
+                    
+                    // Random size between 10px and 50px
+                    const size = Math.random() * 40 + 10;
+                    bubble.style.width = `${size}px`;
+                    bubble.style.height = `${size}px`;
+                    
+                    // Random position
+                    bubble.style.left = `${Math.random() * 100}%`;
+                    
+                    // Random animation duration between 10s and 20s
+                    const duration = Math.random() * 10 + 10;
+                    bubble.style.animationDuration = `${duration}s`;
+                    
+                    // Random delay
+                    bubble.style.animationDelay = `${Math.random() * 5}s`;
+                    
+                    bubblesContainer.appendChild(bubble);
+                }
+            }
+            
+            createBubbles();
+            
+            // Music Controls
+            const bgMusic = document.getElementById('bgMusic');
+            const playBtn = document.getElementById('playBtn');
+            const pauseBtn = document.getElementById('pauseBtn');
+            const musicStatus = document.getElementById('musicStatus');
+            
+            // Initialize music state
+            let isMusicPlaying = false;
+            let userInteracted = false;
+            
+            // Function to handle music play with user interaction
+            function handleFirstInteraction() {
+                if (!userInteracted) {
+                    userInteracted = true;
+                    bgMusic.play()
+                        .then(() => {
+                            isMusicPlaying = true;
+                            musicStatus.textContent = "Music: On";
+                        })
+                        .catch(error => {
+                            console.error("Music play failed:", error);
+                            musicStatus.textContent = "Click ▶ to play music";
+                        });
+                }
+            }
+            
+            // Add event listeners for user interaction
+            document.body.addEventListener('click', handleFirstInteraction, { once: true });
+            document.body.addEventListener('touchstart', handleFirstInteraction, { once: true });
+            document.body.addEventListener('keydown', handleFirstInteraction, { once: true });
+            
+            // Play button
+            playBtn.addEventListener('click', () => {
+                bgMusic.play()
+                    .then(() => {
+                        isMusicPlaying = true;
+                        musicStatus.textContent = "Music: On";
+                    })
+                    .catch(error => {
+                        console.error("Music play failed:", error);
+                    });
+            });
+            
+            // Pause button
+            pauseBtn.addEventListener('click', () => {
+                bgMusic.pause();
+                isMusicPlaying = false;
+                musicStatus.textContent = "Music: Off";
+            });
+            
+            // Set friend's name
+            function setFriendName() {
+                const name = prompt("Enter your friend's name:", "Best Friend");
+                if (name) {
+                    document.querySelectorAll('.friend-name').forEach(el => {
+                        el.textContent = name;
+                    });
+                    document.getElementById('friend-name-display').textContent = name;
+                }
+            }
+            
+            // Polaroid Slider Functionality
+            const slidesContainer = document.getElementById('slides-container');
+            const sliderNav = document.getElementById('slider-nav');
+            const slides = document.querySelectorAll('.slide');
+            let currentSlide = 0;
+            
+            // Create navigation dots
+            slides.forEach((slide, index) => {
+                const dot = document.createElement('div');
+                dot.className = 'slider-dot';
+                if (index === 0) dot.classList.add('active');
+                dot.addEventListener('click', () => goToSlide(index));
+                sliderNav.appendChild(dot);
+            });
+            
+            function goToSlide(index) {
+                currentSlide = index;
+                slidesContainer.style.transform = `translateX(-${currentSlide * 100}%)`;
+                
+                // Update active dot
+                document.querySelectorAll('.slider-dot').forEach((dot, i) => {
+                    dot.classList.toggle('active', i === currentSlide);
+                });
+                
+                // Pause any playing videos when changing slides
+                document.querySelectorAll('video').forEach(video => {
+                    if (!video.paused) {
+                        video.pause();
+                        const playIcon = video.closest('.polaroid-media-container').querySelector('.play-icon');
+                        if (playIcon) playIcon.style.display = 'flex';
+                    }
+                });
+            }
+            
+            // Auto-advance slides
+            let slideInterval = setInterval(nextSlide, 5000);
+            
+            function nextSlide() {
+                currentSlide = (currentSlide + 1) % slides.length;
+                goToSlide(currentSlide);
+            }
+            
+            // Pause auto-advance when hovering
+            const slider = document.querySelector('.polaroid-slider');
+            slider.addEventListener('mouseenter', () => clearInterval(slideInterval));
+            slider.addEventListener('mouseleave', () => {
+                slideInterval = setInterval(nextSlide, 5000);
+            });
+            
+            // Enhanced Video play functionality
+            function setupVideos() {
+                const videoContainers = document.querySelectorAll('.polaroid-media-container');
+                
+                videoContainers.forEach(container => {
+                    const video = container.querySelector('video');
+                    if (!video) return;
+                    
+                    const playIcon = container.querySelector('.play-icon');
+                    if (!playIcon) return;
+                    
+                    // Hide play icon if video is already playing
+                    if (!video.paused) {
+                        playIcon.style.display = 'none';
+                    }
+                    
+                    // Event listeners for video state changes
+                    video.addEventListener('play', () => {
+                        playIcon.style.display = 'none';
+                    });
+                    
+                    video.addEventListener('pause', () => {
+                        playIcon.style.display = 'flex';
+                    });
+                    
+                    // Click handler for video container
+                    container.addEventListener('click', function() {
+                        if (video.paused) {
+                            video.play().catch(error => {
+                                console.error("Video play failed:", error);
+                                // Fallback: mute and try again if unmuted play failed
+                                video.muted = true;
+                                video.play();
+                            });
+                        } else {
+                            video.pause();
+                        }
+                    });
+                });
+            }
+            
+            setupVideos();
+            
+            // Page Navigation
+            const pages = {
+                home: document.getElementById('home-page'),
+                memories: document.getElementById('memories-page'),
+                letter: document.getElementById('letter-page'),
+                wishes: document.getElementById('wishes-page')
+            };
+            
+            function showPage(page) {
+                // Hide all pages
+                Object.values(pages).forEach(p => p.classList.remove('active'));
+                
+                // Show selected page
+                pages[page].classList.add('active');
+                
+                // Reset to first slide when showing memories
+                if (page === 'memories') {
+                    goToSlide(0);
+                    setupVideos();
+                }
+                
+                // Scroll to top
+                window.scrollTo(0, 0);
+            }
+            
+            // Button event listeners
+            document.getElementById('start-btn').addEventListener('click', () => showPage('memories'));
+            document.getElementById('back-to-home-btn').addEventListener('click', () => showPage('home'));
+            document.getElementById('to-letter-btn').addEventListener('click', () => showPage('letter'));
+            document.getElementById('back-to-memories-btn').addEventListener('click', () => showPage('memories'));
+            document.getElementById('to-wishes-btn').addEventListener('click', () => showPage('wishes'));
+            document.getElementById('back-to-letter-btn').addEventListener('click', () => showPage('letter'));
+            document.getElementById('restart-btn').addEventListener('click', () => {
+                showPage('home');
+            });
+            
+            // Make responsive on resize
+            window.addEventListener('resize', function() {
+                goToSlide(currentSlide); // Re-center current slide
+            });
+            
+            // Add error handling for videos
+            document.querySelectorAll('video').forEach(video => {
+                video.addEventListener('error', () => {
+                    console.error("Video error:", video.error);
+                    const container = video.closest('.polaroid-media-container');
+                    if (container) {
+                        const img = document.createElement('img');
+                        img.src = 'https://via.placeholder.com/600x400?text=Video+Not+Available';
+                        img.className = 'polaroid-media';
+                        img.alt = 'Video not available';
+                        container.insertBefore(img, video);
+                        container.removeChild(video);
+                    }
+                });
+            });
+            
+            // Check if music file exists
+            fetch('Feel-Good(chosic.com).mp3')
+                .then(response => {
+                    if (!response.ok) {
+                        console.error("Music file not found, using fallback");
+                        bgMusic.innerHTML = '<source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">';
+                    }
+                })
+                .catch(error => {
+                    console.error("Error checking music file:", error);
+                    bgMusic.innerHTML = '<source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">';
+                });
+        });
+    </script>
+</body>
+</html>
